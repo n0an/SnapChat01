@@ -182,6 +182,7 @@ class NewMessageTableViewController: FriendsTableViewController {
 
 extension NewMessageTableViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        imagePicker.dismissViewControllerAnimated(true, completion: nil)
         cancel()
     }
     
@@ -200,6 +201,8 @@ extension NewMessageTableViewController: UIImagePickerControllerDelegate, UINavi
         dismissViewControllerAnimated(true, completion: nil)
         
     }
+    
+    
 }
 
 

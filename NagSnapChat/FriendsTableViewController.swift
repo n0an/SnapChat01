@@ -39,6 +39,16 @@ class FriendsTableViewController: UITableViewController {
                     self.friends = friends as! [PFUser]
                     self.tableView.reloadData()
                 } else {
+                    
+                    let alertVC = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .Alert)
+                    
+                    let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+                    
+                    alertVC.addAction(okAction)
+                    
+                    self.presentViewController(alertVC, animated: true, completion: nil)
+                    
+
                     print(error)
                 }
             })
