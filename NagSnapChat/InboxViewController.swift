@@ -11,9 +11,17 @@ import Parse
 
 class InboxViewController: UITableViewController {
     
+    // MARK: - PROPERTIES
+    
     struct Storyboard {
         static let showLoginSegue = "Show Log In"
+        static let cellIdentifier = "Message Cell"
     }
+    
+    private var messages = [PFObject]()
+    private var selectedMessage: PFObject!
+
+    // MARK: - viewDidLoad
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,14 +37,45 @@ class InboxViewController: UITableViewController {
         
         self.navigationController?.navigationBarHidden = false
 
+        fetchMessages()
     }
     
-    // MARK: - Target / Action
+    // MARK: - HELPER METHODS
+    
+    func fetchMessages() {
+        if let currentUser = PFUser.currentUser() {
+            let messageQuery = PFQuery(className: "Messages")
+            messageQuery.whereKey("recipientIds", equalTo: currentUser.objectId!)
+            messageQuery.orderByDescending("createdAt")
+            
+            messageQuery.findObjectsInBackgroundWithBlock({ (messages, error) in
+                if error == nil, let messages = messages {
+                    self.messages = messages
+                    self.tableView.reloadData()
+                    
+                } else {
+                    print(error)
+                }
+                
+                self.refreshControl?.endRefreshing()
+            })
+        }
+    }
+    
+    // MARK: - ACTIONS
+    
+    @IBAction func refresh(sender: AnyObject) {
+        print("refresh")
+        fetchMessages()
+    }
     
     @IBAction func logOutDidTap(sender: AnyObject) {
         PFUser.logOut()
         self.performSegueWithIdentifier(Storyboard.showLoginSegue, sender: nil)
     }
+    
+    
+    // MARK: - NAVIGATION
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == Storyboard.showLoginSegue {
@@ -48,4 +87,36 @@ class InboxViewController: UITableViewController {
         }
     }
     
+    
+    // MARK: - UITableViewDataSource
+    
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.messages.count
+    }
+    
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.cellIdentifier, forIndexPath: indexPath)
+        
+        let message = self.messages[indexPath.row]
+        
+        cell.textLabel?.text = message.objectForKey("senderName") as? String
+        
+        return cell
+    }
+    
+    
+    
+    
+    
+    
 }
+
+
+
+
+
+
+
+
+
