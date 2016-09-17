@@ -8,7 +8,8 @@
 
 import UIKit
 import Parse
-
+import AVKit
+import AVFoundation
 
 
 class InboxViewController: UITableViewController {
@@ -121,7 +122,7 @@ class InboxViewController: UITableViewController {
         let message = self.messages[indexPath.row]
         
         cell.textLabel?.text = message["senderName"] as! String
-
+        
         
         return cell
     }
@@ -143,6 +144,34 @@ class InboxViewController: UITableViewController {
             self.performSegueWithIdentifier(Storyboard.showPhotoSegue, sender: nil)
         } else {
             // it is a video message
+            
+            let videoFile = self.selectedMessage["file"] as! PFFile
+            let fileURL = NSURL(string: videoFile.url!)
+            let player = AVPlayer(URL: fileURL!)
+            
+            let playerVC = AVPlayerViewController()
+
+            playerVC.player = player
+            
+            self.presentViewController(playerVC, animated: true, completion: { 
+                playerVC.player?.play()
+            })
+        }
+        
+        // delete message after showing
+        
+        var recipientIds = self.selectedMessage["recipientIds"] as! [String]
+        if recipientIds.count == 1 {
+            self.selectedMessage.deleteInBackground()
+        } else {
+            let currentUserObjectId = PFUser.currentUser()!.objectId!
+            if let index = recipientIds.indexOf(currentUserObjectId) {
+                recipientIds.removeAtIndex(index)
+            }
+            
+            self.selectedMessage["recipientIds"] = recipientIds
+            
+            self.selectedMessage.saveInBackground()
         }
         
         
