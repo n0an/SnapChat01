@@ -7,10 +7,49 @@
 //
 
 import UIKit
+import Parse
 
 class PhotoViewController: UIViewController
 {
     
+    // MARK: - PROPERTIES
+    
+    var message: PFObject! {
+        didSet {
+            startDownloadingPhoto()
+        }
+    }
+    
+    
+    func startDownloadingPhoto() {
+        // Clear imageView
+        self.imageView = nil
+        
+        if self.message != nil {
+            let imageFile = self.message["file"] as! PFFile
+            imageFile.getDataInBackgroundWithBlock({ (photoData, error) in
+                
+                if error == nil {
+                    
+                    let image = UIImage(data: photoData!)
+                    self.imageView = UIImageView(image: image)
+                    self.updateUI()
+                    
+                } else {
+                    let alertVC = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .Alert)
+                    
+                    let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+                    
+                    alertVC.addAction(okAction)
+                    
+                    self.presentViewController(alertVC, animated: true, completion: nil)
+                    
+
+                    print(error)
+                }
+            })
+        }
+    }
     
     // MARK: - Photo View Controller Internal
     
@@ -19,6 +58,11 @@ class PhotoViewController: UIViewController
     
     func updateUI()
     {
+        
+        let senderName = self.message["senderName"] as! String
+        
+        title = "Sent by \(senderName)"
+        
         // 1
         setUpScrollView()
         

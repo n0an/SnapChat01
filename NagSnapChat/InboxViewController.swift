@@ -17,6 +17,8 @@ class InboxViewController: UITableViewController {
     
     struct Storyboard {
         static let showLoginSegue = "Show Log In"
+        static let showPhotoSegue = "Show Photo"
+
         static let cellIdentifier = "Message Cell"
     }
     
@@ -95,6 +97,13 @@ class InboxViewController: UITableViewController {
             // !!!IMPORTANT
             loginSignUpVC.hidesBottomBarWhenPushed = true
             loginSignUpVC.navigationItem.hidesBackButton = true
+            
+        } else if segue.identifier == Storyboard.showPhotoSegue {
+            let photoVC = segue.destinationViewController as! PhotoViewController
+            
+            photoVC.message = self.selectedMessage
+            
+            photoVC.hidesBottomBarWhenPushed = true
         }
     }
     
@@ -111,10 +120,34 @@ class InboxViewController: UITableViewController {
         
         let message = self.messages[indexPath.row]
         
-        cell.textLabel?.text = message.objectForKey("senderName") as? String
+        cell.textLabel?.text = message["senderName"] as! String
+
         
         return cell
     }
+    
+    
+    // MARK: - UITableViewDelegate
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        let message = self.messages[indexPath.row]
+        
+        let fileType = message["fileType"] as! String
+        
+        self.selectedMessage = message
+        
+        if fileType == "photo" {
+            // it is a photo message
+            self.performSegueWithIdentifier(Storyboard.showPhotoSegue, sender: nil)
+        } else {
+            // it is a video message
+        }
+        
+        
+    }
+
     
     
     
