@@ -42,7 +42,7 @@ class InboxViewController: UITableViewController {
         if segue.identifier == Storyboard.showLoginSegue {
             let loginSignUpVC = segue.destinationViewController as! LoginSignupViewController
             
-            //!!! IMPORTANT
+            // !!!IMPORTANT
             loginSignUpVC.hidesBottomBarWhenPushed = true
             loginSignUpVC.navigationItem.hidesBackButton = true
         }

@@ -16,6 +16,7 @@ class LoginSignupViewController: PFLogInViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // !!!IMPORTANT
         self.navigationController?.navigationBarHidden = true
         
 //        title = "NagSnapChat"
@@ -25,6 +26,14 @@ class LoginSignupViewController: PFLogInViewController {
         self.delegate = self
         
         self.signUpController = signUpVC
+        
+        // configure the logo
+        logInView?.logo = UIImageView(image: UIImage(named: "Icon_120"))
+        logInView?.logo?.contentMode = .ScaleAspectFit
+        
+        signUpVC.signUpView?.logo = UIImageView(image: UIImage(named: "Icon_120"))
+        signUpVC.signUpView?.logo?.contentMode = .ScaleAspectFit
+        
     }
     
     func showInbox() {
