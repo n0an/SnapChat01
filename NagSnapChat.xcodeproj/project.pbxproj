@@ -13,6 +13,7 @@
 		15CD2F991D8D916500FBE4EC /* EditFriendsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15CD2F981D8D916500FBE4EC /* EditFriendsTableViewController.swift */; };
 		15CD2F9B1D8D91C500FBE4EC /* FriendsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15CD2F9A1D8D91C500FBE4EC /* FriendsTableViewController.swift */; };
 		15CD2F9E1D8D91FE00FBE4EC /* NewMessageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15CD2F9D1D8D91FE00FBE4EC /* NewMessageTableViewController.swift */; };
+		15CD2FA11D8D941500FBE4EC /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15CD2FA01D8D941500FBE4EC /* Social.framework */; };
 		15D952411D8D8BCE00EB6173 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D952401D8D8BCE00EB6173 /* AppDelegate.swift */; };
 		15D952461D8D8BCE00EB6173 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 15D952441D8D8BCE00EB6173 /* Main.storyboard */; };
 		15D952481D8D8BCE00EB6173 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15D952471D8D8BCE00EB6173 /* Assets.xcassets */; };
@@ -28,6 +29,7 @@
 		15CD2F981D8D916500FBE4EC /* EditFriendsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditFriendsTableViewController.swift; sourceTree = "<group>"; };
 		15CD2F9A1D8D91C500FBE4EC /* FriendsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendsTableViewController.swift; sourceTree = "<group>"; };
 		15CD2F9D1D8D91FE00FBE4EC /* NewMessageTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageTableViewController.swift; sourceTree = "<group>"; };
+		15CD2FA01D8D941500FBE4EC /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		15D9523D1D8D8BCE00EB6173 /* NagSnapChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NagSnapChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15D952401D8D8BCE00EB6173 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		15D952451D8D8BCE00EB6173 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -43,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15CD2FA11D8D941500FBE4EC /* Social.framework in Frameworks */,
 				2820C057F8420C1F268BA5EB /* Pods_NagSnapChat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -130,6 +133,7 @@
 		BA4A9E8B5E0F52FD33D5D94D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				15CD2FA01D8D941500FBE4EC /* Social.framework */,
 				08D3D6C6F62EB87041BA265D /* Pods_NagSnapChat.framework */,
 			);
 			name = Frameworks;

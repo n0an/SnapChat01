@@ -3,5 +3,6 @@ use_frameworks!
 
 target 'NagSnapChat' do
   pod 'Parse'
+  pod 'ParseUI'
 end
 

@@ -7,8 +7,18 @@
 //
 
 import UIKit
+import Parse
+import ParseUI
 
-class LoginSignupViewController: UIViewController {
+
+class LoginSignupViewController: PFLogInViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        title = "NagSnapChat"
+    }
+    
     
 }
 
