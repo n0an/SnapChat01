@@ -40,12 +40,25 @@ class LoginSignupViewController: PFLogInViewController {
         self.navigationController?.popToRootViewControllerAnimated(true)
     }
     
+    func setupUserInstallation() {
+        let installation = PFInstallation.currentInstallation()
+        installation!["user"] = PFUser.currentUser()
+        installation?.saveInBackground()
+        
+    }
+    
+    
+    
 }
 
 
 extension LoginSignupViewController: PFSignUpViewControllerDelegate {
     func signUpViewController(signUpController: PFSignUpViewController, didSignUpUser user: PFUser) {
+        
+        setupUserInstallation()
+        
         dismissViewControllerAnimated(true, completion: nil)
+
         showInbox()
     }
 }
@@ -53,6 +66,10 @@ extension LoginSignupViewController: PFSignUpViewControllerDelegate {
 
 extension LoginSignupViewController: PFLogInViewControllerDelegate {
     func logInViewController(logInController: PFLogInViewController, didLogInUser user: PFUser) {
+        
+        
+        setupUserInstallation()
+
         showInbox()
     }
 }

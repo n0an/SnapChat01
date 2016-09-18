@@ -36,6 +36,18 @@ class InboxViewController: UITableViewController {
         }
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InboxViewController.fetchMessages), name: "reloadMessages", object: nil)
+        
+        
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: "reloadMessages", object: nil)
+    }
+    
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -47,6 +59,19 @@ class InboxViewController: UITableViewController {
     
     // MARK: - HELPER METHODS
     
+    // !!!IMPORTANT!!!
+    func updateTabBarBadge() {
+        let tabArray = (self.tabBarController?.tabBar.items)!
+        let inboxItem = tabArray[0]
+        
+        if self.messages.count > 0 {
+            inboxItem.badgeValue = "++\(self.messages.count)"
+        } else {
+            inboxItem.badgeValue = nil
+
+        }
+    }
+    
     func fetchMessages() {
         if let currentUser = PFUser.currentUser() {
             let messageQuery = PFQuery(className: "Messages")
@@ -57,6 +82,8 @@ class InboxViewController: UITableViewController {
                 if error == nil, let messages = messages {
                     self.messages = messages
                     self.tableView.reloadData()
+                    
+                    self.updateTabBarBadge()
                     
                 } else {
                     

@@ -102,6 +102,25 @@ class NewMessageTableViewController: FriendsTableViewController {
                 // save msessage in background
                 message.saveInBackgroundWithBlock({ (success, error) in
                     if error == nil {
+                        
+                        
+                        // Push Notifications
+                        // !!!IMPORTANT!!!
+                        // ===TOUSE===
+                        
+                        let pushQuery = PFInstallation.query()
+                        pushQuery?.whereKey("user", containedIn: self.outgoingUsers)
+                        
+                        let push = PFPush()
+                        push.setQuery(pushQuery)
+                        
+                        let username = PFUser.currentUser()!.username
+                        let pushDataDictionary = ["alert": "New message from \(username!)", "badge": "Increment", "sound": ""]
+                        
+                        push.setData(pushDataDictionary)
+                        push.sendPushInBackground()
+                        
+                        
                         // saved successfully, go back to inbox
                         self.cancel()
                         

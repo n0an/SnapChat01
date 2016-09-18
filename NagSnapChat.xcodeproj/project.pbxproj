@@ -384,11 +384,12 @@
 			baseConfigurationReference = 742BA26A49F5BADABA651625 /* Pods-NagSnapChat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: com.antonnovoselov.NagSnapChat";
 				INFOPLIST_FILE = NagSnapChat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.antonnovoselov.NagSnapChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "59653170-43f2-4d09-b8e2-cd1a5100e498";
 			};
 			name = Debug;
 		};
@@ -397,11 +398,12 @@
 			baseConfigurationReference = 7231C3EDBCDAF935569D4E37 /* Pods-NagSnapChat.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: com.antonnovoselov.NagSnapChat";
 				INFOPLIST_FILE = NagSnapChat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.antonnovoselov.NagSnapChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "59653170-43f2-4d09-b8e2-cd1a5100e498";
 			};
 			name = Release;
 		};
