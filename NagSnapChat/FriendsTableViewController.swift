@@ -11,21 +11,27 @@ import Parse
 
 class FriendsTableViewController: UITableViewController {
     
+    // MARK: - PROPERTIES
+    
     struct Storyboard {
         static let cellIdentifier = "Friend Cell"
         static let showEditFriendsSegue = "Show Edit Friends"
     }
     
-
     var friends = [PFUser]()
     var currentUser: PFUser!
     var friendsRelation: PFRelation!
     
+    
+    // MARK: - viewWillAppear
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
         fetchFriends()
     }
+    
+    // MARK: - HELPER METHODS
     
     func fetchFriends() {
         currentUser = PFUser.currentUser()!
@@ -52,6 +58,15 @@ class FriendsTableViewController: UITableViewController {
                     print(error)
                 }
             })
+        }
+    }
+    
+    // MARK: - NAVIGATION
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == Storyboard.showEditFriendsSegue {
+            let editFriendsVC = segue.destinationViewController as! EditFriendsTableViewController
+            editFriendsVC.friends = self.friends
         }
     }
     

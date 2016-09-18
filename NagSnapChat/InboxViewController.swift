@@ -121,7 +121,7 @@ class InboxViewController: UITableViewController {
         
         let message = self.messages[indexPath.row]
         
-        cell.textLabel?.text = message["senderName"] as! String
+        cell.textLabel?.text = message["senderName"] as? String
         
         
         return cell

@@ -9,6 +9,9 @@
 import UIKit
 import Parse
 
+// ***SOLUTION***
+// ImageView with scaling, scrolling
+
 
 class PhotoViewController: UIViewController
 {

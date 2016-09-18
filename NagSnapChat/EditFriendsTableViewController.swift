@@ -11,6 +11,11 @@ import Parse
 
 class EditFriendsTableViewController: UITableViewController {
     
+    
+    // MARK: - PROPERTIES
+    
+    let cellAccessoryColor = UIColor(red: 255/255, green: 45/255, blue: 85/255, alpha: 1)
+    
     var friends = [PFUser]()
     private var users = [PFUser]()
     
@@ -30,6 +35,8 @@ class EditFriendsTableViewController: UITableViewController {
 
         
     }
+    
+    // MARK: - HELPER METHODS
     
     private func fetchUsers() {
         let userQuery = PFUser.query()
@@ -56,6 +63,18 @@ class EditFriendsTableViewController: UITableViewController {
         })
     }
     
+    private func isFriendWith(user: PFUser) -> Bool {
+        
+        for friend in friends {
+            if friend.objectId == user.objectId {
+                return true
+            }
+        }
+        
+        return false
+        
+    }
+    
     
     // MARK: - UITableViewDataSource
     
@@ -70,6 +89,13 @@ class EditFriendsTableViewController: UITableViewController {
         
         cell.textLabel?.text = user.username
         
+        if isFriendWith(user) {
+            cell.accessoryType = .Checkmark
+        } else {
+            cell.accessoryType = .None
+        }
+        
+        
         return cell
     }
     
@@ -79,9 +105,40 @@ class EditFriendsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let user = self.users[indexPath.row]
-        let friendsRelation = currentUser.relationForKey("friendsRelation")
         
-        friendsRelation.addObject(user)
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        
+        let friendsRelation = currentUser.relationForKey("friendsRelation")
+
+        
+        if isFriendWith(user) {
+            // unfriend
+            cell?.accessoryType = .None
+            
+            for friend in self.friends {
+                if friend.objectId == user.objectId {
+                    let indexToRemove = self.friends.indexOf(friend)
+                    self.friends.removeAtIndex(indexToRemove!)
+                }
+            }
+            
+
+            
+            friendsRelation.removeObject(user)
+            
+        } else {
+            // add friendship
+            cell?.accessoryType = .Checkmark
+            
+            friends.append(user)
+            
+            friendsRelation.addObject(user)
+        }
+        
+        
+        
+        
+        
         currentUser.saveInBackgroundWithBlock { (success, error) in
             if error != nil {
                 print(error)
