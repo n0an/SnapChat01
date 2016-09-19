@@ -23,7 +23,7 @@ class InboxViewController: UITableViewController {
         static let cellIdentifier = "Message Cell"
     }
     
-    private var messages = [PFObject]()
+    var messages = [PFObject]()
     private var selectedMessage: PFObject!
 
     // MARK: - viewDidLoad
