@@ -17,9 +17,9 @@ class EditFriendsTableViewController: UITableViewController {
     let cellAccessoryColor = UIColor(red: 255/255, green: 45/255, blue: 85/255, alpha: 1)
     
     var friends = [PFUser]()
-    private var users = [PFUser]()
+    fileprivate var users = [PFUser]()
     
-    private var currentUser = PFUser.currentUser()!
+    fileprivate var currentUser = PFUser.current()!
     
     struct Storyboard {
         static let cellIdentifier = "Friend Cell"
@@ -38,23 +38,23 @@ class EditFriendsTableViewController: UITableViewController {
     
     // MARK: - HELPER METHODS
     
-    private func fetchUsers() {
+    fileprivate func fetchUsers() {
         let userQuery = PFUser.query()
-        userQuery?.orderByAscending("username")
-        userQuery?.findObjectsInBackgroundWithBlock({ (users, error) in
+        userQuery?.order(byAscending: "username")
+        userQuery?.findObjectsInBackground(block: { (users, error) in
             
             if error == nil {
                 self.users = users as! [PFUser]
                 self.tableView.reloadData()
             } else {
                 
-                let alertVC = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .Alert)
+                let alertVC = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
                 
-                let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+                let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
                 
                 alertVC.addAction(okAction)
                 
-                self.presentViewController(alertVC, animated: true, completion: nil)
+                self.present(alertVC, animated: true, completion: nil)
                 
 
                 print(error)
@@ -63,7 +63,7 @@ class EditFriendsTableViewController: UITableViewController {
         })
     }
     
-    private func isFriendWith(user: PFUser) -> Bool {
+    fileprivate func isFriendWith(_ user: PFUser) -> Bool {
         
         for friend in friends {
             if friend.objectId == user.objectId {
@@ -78,21 +78,21 @@ class EditFriendsTableViewController: UITableViewController {
     
     // MARK: - UITableViewDataSource
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.users.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.cellIdentifier, forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.cellIdentifier, for: indexPath)
         
         let user = self.users[indexPath.row]
         
         cell.textLabel?.text = user.username
         
         if isFriendWith(user) {
-            cell.accessoryType = .Checkmark
+            cell.accessoryType = .checkmark
         } else {
-            cell.accessoryType = .None
+            cell.accessoryType = .none
         }
         
         
@@ -102,44 +102,44 @@ class EditFriendsTableViewController: UITableViewController {
     
     // MARK: - UITableViewDelegate
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.tableView.deselectRow(at: indexPath, animated: true)
         let user = self.users[indexPath.row]
         
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        let cell = tableView.cellForRow(at: indexPath)
         
-        let friendsRelation = currentUser.relationForKey("friendsRelation")
+        let friendsRelation = currentUser.relation(forKey: "friendsRelation")
 
         
         if isFriendWith(user) {
             // unfriend
-            cell?.accessoryType = .None
+            cell?.accessoryType = .none
             
             for friend in self.friends {
                 if friend.objectId == user.objectId {
-                    let indexToRemove = self.friends.indexOf(friend)
-                    self.friends.removeAtIndex(indexToRemove!)
+                    let indexToRemove = self.friends.index(of: friend)
+                    self.friends.remove(at: indexToRemove!)
                 }
             }
             
 
             
-            friendsRelation.removeObject(user)
+            friendsRelation.remove(user)
             
         } else {
             // add friendship
-            cell?.accessoryType = .Checkmark
+            cell?.accessoryType = .checkmark
             
             friends.append(user)
             
-            friendsRelation.addObject(user)
+            friendsRelation.add(user)
         }
         
         
         
         
         
-        currentUser.saveInBackgroundWithBlock { (success, error) in
+        currentUser.saveInBackground { (success, error) in
             if error != nil {
                 print(error)
             }

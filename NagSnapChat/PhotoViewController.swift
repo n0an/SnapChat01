@@ -31,7 +31,7 @@ class PhotoViewController: UIViewController
         
         if self.message != nil {
             let imageFile = self.message["file"] as! PFFile
-            imageFile.getDataInBackgroundWithBlock({ (photoData, error) in
+            imageFile.getDataInBackground(block: { (photoData, error) in
                 
                 if error == nil {
                     
@@ -40,13 +40,13 @@ class PhotoViewController: UIViewController
                     self.updateUI()
                     
                 } else {
-                    let alertVC = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .Alert)
+                    let alertVC = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
                     
-                    let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+                    let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
                     
                     alertVC.addAction(okAction)
                     
-                    self.presentViewController(alertVC, animated: true, completion: nil)
+                    self.present(alertVC, animated: true, completion: nil)
                     
 
                     print(error)
@@ -57,8 +57,8 @@ class PhotoViewController: UIViewController
     
     // MARK: - Photo View Controller Internal
     
-    private var imageView: UIImageView!
-    private var scrollView: UIScrollView!
+    fileprivate var imageView: UIImageView!
+    fileprivate var scrollView: UIScrollView!
     
     func updateUI()
     {
@@ -99,11 +99,11 @@ class PhotoViewController: UIViewController
     // MARK: - Set up scroll view
     
     // 2
-    private func setUpScrollView()
+    fileprivate func setUpScrollView()
     {
         scrollView = UIScrollView(frame: view.bounds)
-        scrollView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        scrollView.backgroundColor = UIColor.whiteColor()
+        scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        scrollView.backgroundColor = UIColor.white
         scrollView.contentSize = imageView.bounds.size
         
         // set up the view hierarchy
@@ -113,7 +113,7 @@ class PhotoViewController: UIViewController
     //-2
     
     // 5: set up zooming properties for scroll view
-    private func setZoomScaleFor(scrollViewSize: CGSize)
+    fileprivate func setZoomScaleFor(_ scrollViewSize: CGSize)
     {
         let imageSize = imageView.bounds.size
         let widthScale = scrollViewSize.width / imageSize.width
@@ -126,7 +126,7 @@ class PhotoViewController: UIViewController
     }
     
     // 7: recenter the image
-    private func recenterImage()
+    fileprivate func recenterImage()
     {
         let scrollViewSize = scrollView.bounds.size
         let imageSize = imageView.frame.size    // need to use frame with respect to the scroll view because bounds.size is always the big size of the original image
@@ -143,12 +143,12 @@ extension PhotoViewController: UIScrollViewDelegate
 {
     // 4: implement scroll view delegate method for zooming features
     // which view in the scrollview to zoom
-    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
     
     // 9: when we zoomed in the image, scroll it around, we want to center the image too
-    func scrollViewDidZoom(scrollView: UIScrollView) {
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
         recenterImage()
     }
 }

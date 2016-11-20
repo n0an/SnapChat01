@@ -36,6 +36,7 @@
 		15D952471D8D8BCE00EB6173 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		15D9524A1D8D8BCE00EB6173 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		15D9524C1D8D8BCE00EB6173 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18D68A561DE1D757000F9126 /* NagSnapChat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NagSnapChat.entitlements; sourceTree = "<group>"; };
 		7231C3EDBCDAF935569D4E37 /* Pods-NagSnapChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NagSnapChat.release.xcconfig"; path = "Pods/Target Support Files/Pods-NagSnapChat/Pods-NagSnapChat.release.xcconfig"; sourceTree = "<group>"; };
 		742BA26A49F5BADABA651625 /* Pods-NagSnapChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NagSnapChat.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NagSnapChat/Pods-NagSnapChat.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,6 +109,7 @@
 		15D9523F1D8D8BCE00EB6173 /* NagSnapChat */ = {
 			isa = PBXGroup;
 			children = (
+				18D68A561DE1D757000F9126 /* NagSnapChat.entitlements */,
 				15D952401D8D8BCE00EB6173 /* AppDelegate.swift */,
 				15CD2F971D8D913B00FBE4EC /* Login and Signup */,
 				15CD2F961D8D912F00FBE4EC /* Inbox */,
@@ -175,6 +177,13 @@
 					15D9523C1D8D8BCE00EB6173 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = 358V8FBM3U;
+						LastSwiftMigration = 0810;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -384,12 +393,17 @@
 			baseConfigurationReference = 742BA26A49F5BADABA651625 /* Pods-NagSnapChat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = NagSnapChat/NagSnapChat.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: com.antonnovoselov.NagSnapChat";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = NagSnapChat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.antonnovoselov.NagSnapChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "59653170-43f2-4d09-b8e2-cd1a5100e498";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -398,12 +412,17 @@
 			baseConfigurationReference = 7231C3EDBCDAF935569D4E37 /* Pods-NagSnapChat.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = NagSnapChat/NagSnapChat.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: com.antonnovoselov.NagSnapChat";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = NagSnapChat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.antonnovoselov.NagSnapChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "59653170-43f2-4d09-b8e2-cd1a5100e498";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

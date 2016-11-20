@@ -20,12 +20,12 @@ class FriendsTableViewController: UITableViewController {
     
     var friends = [PFUser]()
     var currentUser: PFUser!
-    var friendsRelation: PFRelation!
+    var friendsRelation: PFRelation<PFObject>!
     
     
     // MARK: - viewWillAppear
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         fetchFriends()
@@ -34,25 +34,25 @@ class FriendsTableViewController: UITableViewController {
     // MARK: - HELPER METHODS
     
     func fetchFriends() {
-        currentUser = PFUser.currentUser()!
+        currentUser = PFUser.current()!
         
         if let friendsRelation = currentUser["friendsRelation"] as? PFRelation {
             let friendsQuery = friendsRelation.query()
-            friendsQuery.orderByAscending("username")
+            friendsQuery.order(byAscending: "username")
             
-            friendsQuery.findObjectsInBackgroundWithBlock({ (friends, error) in
+            friendsQuery.findObjectsInBackground(block: { (friends, error) in
                 if error == nil {
                     self.friends = friends as! [PFUser]
                     self.tableView.reloadData()
                 } else {
                     
-                    let alertVC = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .Alert)
+                    let alertVC = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
                     
-                    let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+                    let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
                     
                     alertVC.addAction(okAction)
                     
-                    self.presentViewController(alertVC, animated: true, completion: nil)
+                    self.present(alertVC, animated: true, completion: nil)
                     
 
                     print(error)
@@ -63,9 +63,9 @@ class FriendsTableViewController: UITableViewController {
     
     // MARK: - NAVIGATION
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Storyboard.showEditFriendsSegue {
-            let editFriendsVC = segue.destinationViewController as! EditFriendsTableViewController
+            let editFriendsVC = segue.destination as! EditFriendsTableViewController
             editFriendsVC.friends = self.friends
         }
     }
@@ -73,12 +73,12 @@ class FriendsTableViewController: UITableViewController {
     
     // MARK: - UITableViewDataSource
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.friends.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.cellIdentifier, forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.cellIdentifier, for: indexPath)
         
         let friend = self.friends[indexPath.row]
         
@@ -90,8 +90,8 @@ class FriendsTableViewController: UITableViewController {
     
     // MARK: - UITableViewDelegate
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.tableView.deselectRow(at: indexPath, animated: true)
         
     }
 

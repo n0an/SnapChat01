@@ -24,35 +24,35 @@ class InboxViewController: UITableViewController {
     }
     
     var messages = [PFObject]()
-    private var selectedMessage: PFObject!
+    fileprivate var selectedMessage: PFObject!
 
     // MARK: - viewDidLoad
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if PFUser.currentUser() == nil {
-            performSegueWithIdentifier(Storyboard.showLoginSegue, sender: nil)
+        if PFUser.current() == nil {
+            performSegue(withIdentifier: Storyboard.showLoginSegue, sender: nil)
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InboxViewController.fetchMessages), name: "reloadMessages", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(InboxViewController.fetchMessages), name: NSNotification.Name(rawValue: "reloadMessages"), object: nil)
         
         
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: "reloadMessages", object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadMessages"), object: nil)
     }
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.isNavigationBarHidden = false
 
         fetchMessages()
     }
@@ -73,12 +73,12 @@ class InboxViewController: UITableViewController {
     }
     
     func fetchMessages() {
-        if let currentUser = PFUser.currentUser() {
+        if let currentUser = PFUser.current() {
             let messageQuery = PFQuery(className: "Messages")
             messageQuery.whereKey("recipientIds", equalTo: currentUser.objectId!)
-            messageQuery.orderByDescending("createdAt")
+            messageQuery.order(byDescending: "createdAt")
             
-            messageQuery.findObjectsInBackgroundWithBlock({ (messages, error) in
+            messageQuery.findObjectsInBackground(block: { (messages, error) in
                 if error == nil, let messages = messages {
                     self.messages = messages
                     self.tableView.reloadData()
@@ -87,13 +87,13 @@ class InboxViewController: UITableViewController {
                     
                 } else {
                     
-                    let alertVC = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .Alert)
+                    let alertVC = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
                     
-                    let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+                    let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
                     
                     alertVC.addAction(okAction)
                     
-                    self.presentViewController(alertVC, animated: true, completion: nil)
+                    self.present(alertVC, animated: true, completion: nil)
                     
                     print(error)
                 }
@@ -105,29 +105,29 @@ class InboxViewController: UITableViewController {
     
     // MARK: - ACTIONS
     
-    @IBAction func refresh(sender: AnyObject) {
+    @IBAction func refresh(_ sender: AnyObject) {
         print("refresh")
         fetchMessages()
     }
     
-    @IBAction func logOutDidTap(sender: AnyObject) {
+    @IBAction func logOutDidTap(_ sender: AnyObject) {
         PFUser.logOut()
-        self.performSegueWithIdentifier(Storyboard.showLoginSegue, sender: nil)
+        self.performSegue(withIdentifier: Storyboard.showLoginSegue, sender: nil)
     }
     
     
     // MARK: - NAVIGATION
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Storyboard.showLoginSegue {
-            let loginSignUpVC = segue.destinationViewController as! LoginSignupViewController
+            let loginSignUpVC = segue.destination as! LoginSignupViewController
             
             // !!!IMPORTANT
             loginSignUpVC.hidesBottomBarWhenPushed = true
             loginSignUpVC.navigationItem.hidesBackButton = true
             
         } else if segue.identifier == Storyboard.showPhotoSegue {
-            let photoVC = segue.destinationViewController as! PhotoViewController
+            let photoVC = segue.destination as! PhotoViewController
             
             photoVC.message = self.selectedMessage
             
@@ -138,13 +138,13 @@ class InboxViewController: UITableViewController {
     
     // MARK: - UITableViewDataSource
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.messages.count
     }
     
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.cellIdentifier, forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.cellIdentifier, for: indexPath)
         
         let message = self.messages[indexPath.row]
         
@@ -157,8 +157,8 @@ class InboxViewController: UITableViewController {
     
     // MARK: - UITableViewDelegate
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.tableView.deselectRow(at: indexPath, animated: true)
         
         let message = self.messages[indexPath.row]
         
@@ -168,19 +168,19 @@ class InboxViewController: UITableViewController {
         
         if fileType == "photo" {
             // it is a photo message
-            self.performSegueWithIdentifier(Storyboard.showPhotoSegue, sender: nil)
+            self.performSegue(withIdentifier: Storyboard.showPhotoSegue, sender: nil)
         } else {
             // it is a video message
             
             let videoFile = self.selectedMessage["file"] as! PFFile
-            let fileURL = NSURL(string: videoFile.url!)
-            let player = AVPlayer(URL: fileURL!)
+            let fileURL = URL(string: videoFile.url!)
+            let player = AVPlayer(url: fileURL!)
             
             let playerVC = AVPlayerViewController()
 
             playerVC.player = player
             
-            self.presentViewController(playerVC, animated: true, completion: { 
+            self.present(playerVC, animated: true, completion: { 
                 playerVC.player?.play()
             })
         }
@@ -191,9 +191,9 @@ class InboxViewController: UITableViewController {
         if recipientIds.count == 1 {
             self.selectedMessage.deleteInBackground()
         } else {
-            let currentUserObjectId = PFUser.currentUser()!.objectId!
-            if let index = recipientIds.indexOf(currentUserObjectId) {
-                recipientIds.removeAtIndex(index)
+            let currentUserObjectId = PFUser.current()!.objectId!
+            if let index = recipientIds.index(of: currentUserObjectId) {
+                recipientIds.remove(at: index)
             }
             
             self.selectedMessage["recipientIds"] = recipientIds

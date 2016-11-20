@@ -17,7 +17,7 @@ class LoginSignupViewController: PFLogInViewController {
         super.viewDidLoad()
         
         // !!!IMPORTANT
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
         
 //        title = "NagSnapChat"
         
@@ -29,20 +29,20 @@ class LoginSignupViewController: PFLogInViewController {
         
         // configure the logo
         logInView?.logo = UIImageView(image: UIImage(named: "Icon_120"))
-        logInView?.logo?.contentMode = .ScaleAspectFit
+        logInView?.logo?.contentMode = .scaleAspectFit
         
         signUpVC.signUpView?.logo = UIImageView(image: UIImage(named: "Icon_120"))
-        signUpVC.signUpView?.logo?.contentMode = .ScaleAspectFit
+        signUpVC.signUpView?.logo?.contentMode = .scaleAspectFit
         
     }
     
     func showInbox() {
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        self.navigationController?.popToRootViewController(animated: true)
     }
     
     func setupUserInstallation() {
-        let installation = PFInstallation.currentInstallation()
-        installation!["user"] = PFUser.currentUser()
+        let installation = PFInstallation.current()
+        installation!["user"] = PFUser.current()
         installation?.saveInBackground()
         
     }
@@ -53,11 +53,11 @@ class LoginSignupViewController: PFLogInViewController {
 
 
 extension LoginSignupViewController: PFSignUpViewControllerDelegate {
-    func signUpViewController(signUpController: PFSignUpViewController, didSignUpUser user: PFUser) {
+    func signUpViewController(_ signUpController: PFSignUpViewController, didSignUp user: PFUser) {
         
         setupUserInstallation()
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
 
         showInbox()
     }
@@ -65,7 +65,7 @@ extension LoginSignupViewController: PFSignUpViewControllerDelegate {
 
 
 extension LoginSignupViewController: PFLogInViewControllerDelegate {
-    func logInViewController(logInController: PFLogInViewController, didLogInUser user: PFUser) {
+    func log(_ logInController: PFLogInViewController, didLogIn user: PFUser) {
         
         
         setupUserInstallation()

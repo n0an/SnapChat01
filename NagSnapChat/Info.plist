@@ -41,6 +41,12 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Do snaps</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Do snaps</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Do snaps</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
